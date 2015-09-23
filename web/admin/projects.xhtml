@@ -17,11 +17,12 @@
             <b:row>
                 <b:column col-xs="12" col-sm="12" col-md="12">
                     <h2>Project Manager</h2>
-                    
+
                 </b:column>
             </b:row>
-            <p:commandButton type="submit" class="btn btn-success" value="Add new project" action="#{addProjectBean.goToThisPage()}" />
-
+            <div class="pull-right">
+                <p:commandButton type="submit" class="btn btn-success btn-lg" value="Add new project" action="#{addProjectBean.goToThisPage()}" />
+            </div>
             <br/><br/>
 
             <h:panelGroup id="mainPanel">
@@ -50,7 +51,7 @@
                                 </f:facet>
                                 <h:outputText value="#{project.imageLocation}" />
                             </p:column>
-                            
+
 
                         </p:dataTable>
                     </h:form>
