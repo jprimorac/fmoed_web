@@ -12,6 +12,7 @@ import database.Usergroupreview;
 import helpers.GroupExtra;
 import helpers.IdKlasa;
 import helpers.ProjectExtra;
+import helpers.ReviewUser;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -64,6 +65,7 @@ public class ProjectsFacadeREST extends AbstractFacade<Projects> {
     @Path("{id}")
     @Produces({"application/json"})
     public ProjectExtra find(@PathParam("id") Integer id) {
+        this.em.getEntityManagerFactory().getCache().evictAll();
         Projects project = super.find(id);
         ProjectExtra proExtra = new ProjectExtra();
         proExtra.setId(project.getId());
@@ -75,10 +77,16 @@ public class ProjectsFacadeREST extends AbstractFacade<Projects> {
             GroupExtra group = new GroupExtra();
             group.setId(g.getId());
             group.setName(g.getName());
-            List<Reviews> reviews = new ArrayList<>();
+            List<ReviewUser> reviews = new ArrayList<>();
             List<Usergroupreview> ugrs = g.getUsergroupreviewList();
             for(Usergroupreview ugr : ugrs){
-                reviews.add(ugr.getReview()); 
+                ReviewUser ru = new ReviewUser();
+                ru.setId(ugr.getReview().getId());
+                ru.setName(ugr.getReview().getName());
+                ru.setComment(ugr.getReview().getComment());
+                ru.setRating(ugr.getReview().getGrade());
+                ru.setUser(ugr.getUser());
+                reviews.add(ru); 
             }
             group.setReviews(reviews);
             groups.add(group);
