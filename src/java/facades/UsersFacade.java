@@ -6,7 +6,6 @@
 package facades;
 
 import database.Users;
-import database.Users_;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -41,7 +40,7 @@ public class UsersFacade extends AbstractFacade<Users> {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Users> cq = cb.createQuery(Users.class);
         Root<Users> a = cq.from(Users.class);
-        Predicate uvjet = cb.equal(a.get(Users_.username), username);
+        Predicate uvjet = cb.equal(a.get("username"), username);
         cq.where(uvjet);
         TypedQuery<Users> q = em.createQuery(cq);
         List<Users> users = q.getResultList();
@@ -59,7 +58,7 @@ public class UsersFacade extends AbstractFacade<Users> {
         CriteriaQuery<Users> cq = cb.createQuery(Users.class);
         Root<Users> a = cq.from(Users.class);
         List<Predicate> predicates = new ArrayList<>();
-        Predicate uvjet = cb.equal(a.get(Users_.username), username);
+        Predicate uvjet = cb.equal(a.get("username"), username);
         predicates.add(uvjet);
         cq.select(a).where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Users> q = em.createQuery(cq);
@@ -76,7 +75,7 @@ public class UsersFacade extends AbstractFacade<Users> {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Users> cq = cb.createQuery(Users.class);
         Root<Users> a = cq.from(Users.class);
-        Predicate uvjet = cb.equal(a.get(Users_.username), username);
+        Predicate uvjet = cb.equal(a.get("username"), username);
         cq.where(uvjet);
         TypedQuery<Users> q = em.createQuery(cq);
         List<Users> users = q.getResultList();

@@ -53,7 +53,7 @@ public class LoginBean {
             if (usertype.equals("admin")) {
                 ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
                 try {
-                    context.redirect(context.getRequestContextPath() + "/faces/admin/adminIndex.xhtml");
+                    context.redirect(context.getRequestContextPath() + "/faces/admin/dashboard.xhtml");
                 } catch (IOException ex) {
                     Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
                 }
