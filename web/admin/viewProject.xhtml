@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"    
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Projects</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    </h:head>
+    <h:body>
+        <ui:include src="/admin/adminMenu.xhtml"/>
+        <b:container>
+
+            <c:set var="chosen" value="#{viewProjectBean.chosen}"/>
+            <c:if test="${chosen == true}">
+                <b:row>
+                    <b:column col-xs="12" col-sm="12" col-md="12">
+                        <h1>#{viewProjectBean.project.name}</h1>
+                        <h1 style="margin-top: -7px"><small>Project Details</small></h1>
+
+                    </b:column>
+                </b:row>
+                <br/><br/>
+
+                <h:panelGroup id="mainPanel">
+                    <h:panelGroup layout="block">
+                        <h:form>
+                            <b:panelGrid colSpans="12">
+                                <b:label text="Project name"/>
+                                <b:inputText value="#{viewProjectBean.project.name}" readonly="true" />
+
+                                <b:label text="Project Description"/>
+                                <b:inputText value="#{viewProjectBean.project.description}" readonly="true" />
+                                <b:label text="Image"/>
+                                <b:inputText value="#{viewProjectBean.project.imageLocation}" readonly="true" />
+                            </b:panelGrid>
+
+                            <b:panelGrid colSpans="4,8">
+                                <p:dataTable var="group" value="#{viewProjectBean.project.groupsList}">
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Group" />
+                                        </f:facet>
+                                        <h:outputText value="#{group.name}" />
+                                    </p:column>
+                                </p:dataTable> 
+                            </b:panelGrid>
+                        </h:form>
+                    </h:panelGroup> 
+                </h:panelGroup> 
+            </c:if>
+            <c:if test="${chosen == false}">
+                <h2>No user</h2>
+            </c:if>
+        </b:container>
+    </h:body>
+</html>
+

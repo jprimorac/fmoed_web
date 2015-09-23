@@ -11,6 +11,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     </h:head>
+    <style>
+        .table2 .ui-widget-header{
+            background: #A7B5D0 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)))!important
+        }
+    </style>
     <h:body>
         <ui:include src="/admin/adminMenu.xhtml"/>
         <b:container>
@@ -57,7 +62,7 @@
 
                                 </p:dataTable>
 
-                                <p:dataTable  style="margin-top: 20px" id="table2" var="admin" value="#{usersBean.admins}" rows="10" paginator="true" paginatorPosition="bottom">
+                                <p:dataTable  class="table2" style="margin-top: 20px;" id="table2" var="admin" value="#{usersBean.admins}" rows="10" paginator="true" paginatorPosition="bottom">
                                     <f:facet name="header">
                                         Admins
                                     </f:facet>
