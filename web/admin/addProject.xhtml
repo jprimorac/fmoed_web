@@ -9,11 +9,12 @@
     <h:head>
         <title>Add new project</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
     </h:head>
     <h:body>
         <b:container style=" margin-left: auto; margin-right: auto;" >
             <b:row>
-                <b:column col-xs="12" col-sm="6" col-md="4"> 
+                <b:column col-xs="14" col-sm="7" col-md="5"> 
                     <h2>Add new project</h2>
                     <h:form id="forma">
                         <h:panelGrid columns="2" cellpadding="5">
@@ -21,28 +22,32 @@
                             <p:inputText id="name" value="#{addProjectBean.project.name}"/>
                             <p:outputLabel for="desc" value="Description:" />
                             <p:inputText id="desc" value="#{addProjectBean.project.description}"/>
-                            <p:outputLabel for="name" value="New groups name:" />
-                            <p:inputText id="name" value="#{addProjectBean.group.name}"/>
                             
-                            <f:ajax render="forma">
-                                <p:commandButton type="submit" class="btn btn-primary" value="Add group" action="#{addProjectBean.addNewGroup}" style="width: 241px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px"/>
-                            </f:ajax>
-                            
-
-                            <p:dataList value="#{addProjectBean.project.groupsList}" var="group" type="ordered">
+                            <h:commandButton type="submit" class="btn btn-primary" value="Save" action="#{addProjectBean.addNewProject()}" style="width: 241px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px"/>
+                        </h:panelGrid>
+                    </h:form>
+                </b:column>
+                
+                <b:column col-xs="14" col-sm="7" col-md="5"> 
+                    <br/><br/><br/>
+                    <h:form id="addGroupForm">
+                        <p:outputLabel for="grname" value="New groups name:" />
+                        <p:inputText id="grname" value="#{addProjectBean.group.name}" required="false"/>
+                        <p:dataList value="#{addProjectBean.listGroups}" var="group" type="ordered">
                                 <f:facet name="header">
                                     Groups
                                 </f:facet>
                                 #{group.name}
                             </p:dataList>
-
-                            <p:commandButton type="submit" class="btn btn-primary" value="Save" action="#{addProjectBean.addNewProject}" style="width: 241px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px"/>
-                        </h:panelGrid>
+                        <f:ajax render="addGroupForm">
+                            <p:commandButton update="addGroupForm" class="btn btn-primary" value="Add group" actionListener="#{addProjectBean.addNewGroup()}" style="width: 241px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px"/>
+                        </f:ajax>
                     </h:form>
+
                 </b:column>
+
             </b:row>
         </b:container>
-
     </h:body>
 </html>
 
