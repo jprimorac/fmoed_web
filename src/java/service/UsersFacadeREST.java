@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -24,7 +25,7 @@ import javax.ws.rs.Produces;
  * @author prima
  */
 @Stateless
-@Path("/users")
+@Path("users")
 public class UsersFacadeREST extends AbstractFacade<Users> {
     @PersistenceContext(unitName = "ReviewerPU")
     private EntityManager em;
@@ -34,10 +35,10 @@ public class UsersFacadeREST extends AbstractFacade<Users> {
     }
 
     @POST
-    @Override
-    @Consumes({"application/xml", "application/json"})
-    public void create(Users entity) {
-        super.create(entity);
+    @Consumes({ "application/json"})
+    public void create(@HeaderParam("token") String token, Users entity) {
+        if(token.equals("123456"))
+            super.create(entity);
     }
 
     @PUT

@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
     @NamedQuery(name = "Users.findByName", query = "SELECT u FROM Users u WHERE u.name = :name"),
     @NamedQuery(name = "Users.findBySurname", query = "SELECT u FROM Users u WHERE u.surname = :surname"),
-    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password")})
+    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
+    @NamedQuery(name = "Users.findBySalt", query = "SELECT u FROM Users u WHERE u.salt = :salt"),
+    @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email")})
 public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,6 +60,15 @@ public class Users implements Serializable {
     @Size(min = 1, max = 255)
     @Column(nullable = false, length = 255)
     private String password;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(nullable = false, length = 255)
+    private String salt;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 255)
+    @Column(length = 255)
+    private String email;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Usergroupreview> usergroupreviewList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
@@ -70,10 +81,11 @@ public class Users implements Serializable {
         this.id = id;
     }
 
-    public Users(Integer id, String username, String password) {
+    public Users(Integer id, String username, String password, String salt) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.salt = salt;
     }
 
     public Integer getId() {
@@ -114,6 +126,22 @@ public class Users implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @XmlTransient
