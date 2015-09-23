@@ -5,8 +5,19 @@
  */
 package service;
 
+import controllers.PasswordHash;
+import database.Tokens;
 import database.Users;
+import facades.TokensFacade;
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +38,8 @@ import javax.ws.rs.Produces;
 @Stateless
 @Path("users")
 public class UsersFacadeREST extends AbstractFacade<Users> {
+    @EJB
+    private TokensFacade tokensFacade;
     @PersistenceContext(unitName = "ReviewerPU")
     private EntityManager em;
 
@@ -36,9 +49,29 @@ public class UsersFacadeREST extends AbstractFacade<Users> {
 
     @POST
     @Consumes({ "application/json"})
-    public void create(@HeaderParam("token") String token, Users entity) {
-        if(token.equals("123456"))
+    @Override
+    public void create(Users entity) {
+            String password = entity.getPassword();
+            String saltAndHash;
+        try {
+            saltAndHash = PasswordHash.createHash(password);
+            String[] nameSaltHash = saltAndHash.split(":");
+            entity.setPassword(nameSaltHash[2]);
+            entity.setSalt(nameSaltHash[1]);
             super.create(entity);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UsersFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(UsersFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                  
+            Tokens token = new Tokens();
+            token.setUser(entity);
+            SecureRandom random = new SecureRandom();
+            token.setToken(new BigInteger(130, random).toString(32));
+            token.setDate(new Date(System.currentTimeMillis()));
+            tokensFacade.create(token);     
+            
     }
 
     @PUT
