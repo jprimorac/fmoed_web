@@ -16,8 +16,81 @@
         <b:container>
             <b:row>
                 <b:column col-xs="12" col-sm="12" col-md="12">
-                    <h2>User Manager</h2>
-                    
+                    <h1>User Manager</h1>
+                    <div class="pull-right">
+                        <p:commandButton type="submit" class="btn btn-success btn-lg" value="Add new user" action="#{addUserBean.userLink()}" />
+                        <p:commandButton type="submit" class="btn btn-primary btn-lg" value="Add new admin" action="#{addUserBean.adminLink()}" />
+                    </div>
+                    <br/><br/>
+                    <h:panelGroup id="mainPanel">
+                        <h:panelGroup layout="block">
+                            <h:form id="mainForm">
+                                <p:dataTable style="margin-top: 20px" id="table1" var="user" value="#{usersBean.users}" rows="10" paginator="true" paginatorPosition="bottom">
+                                    <f:facet name="header">
+                                        Users
+                                    </f:facet>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Username" />
+                                        </f:facet>
+                                        <h:outputText value="#{user.username}" />
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Name" />
+                                        </f:facet>
+                                        <h:outputText value="#{user.name} #{user.surname}" />
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Email" />
+                                        </f:facet>
+                                        <h:outputText value="#{user.email}" />
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Projects Attending" />
+                                        </f:facet>
+                                        <h:outputText value="not implemented" />
+                                    </p:column>
+
+                                </p:dataTable>
+
+                                <p:dataTable  style="margin-top: 20px" id="table2" var="admin" value="#{usersBean.admins}" rows="10" paginator="true" paginatorPosition="bottom">
+                                    <f:facet name="header">
+                                        Admins
+                                    </f:facet>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Username" />
+                                        </f:facet>
+                                        <h:outputText value="#{admin.username}" />
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Name" />
+                                        </f:facet>
+                                        <h:outputText value="#{admin.name} #{admin.surname}" />
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Email" />
+                                        </f:facet>
+                                        <h:outputText value="#{admin.email}" />
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Projects Attending" />
+                                        </f:facet>
+                                        <h:outputText value="not implemented" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGroup> 
+                    </h:panelGroup> 
                 </b:column>
             </b:row>
 
