@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Admins.findByUsername", query = "SELECT a FROM Admins a WHERE a.username = :username"),
     @NamedQuery(name = "Admins.findByPassword", query = "SELECT a FROM Admins a WHERE a.password = :password"),
     @NamedQuery(name = "Admins.findByName", query = "SELECT a FROM Admins a WHERE a.name = :name"),
-    @NamedQuery(name = "Admins.findBySurname", query = "SELECT a FROM Admins a WHERE a.surname = :surname")})
+    @NamedQuery(name = "Admins.findBySurname", query = "SELECT a FROM Admins a WHERE a.surname = :surname"),
+    @NamedQuery(name = "Admins.findBySalt", query = "SELECT a FROM Admins a WHERE a.salt = :salt"),
+    @NamedQuery(name = "Admins.findByEmail", query = "SELECT a FROM Admins a WHERE a.email = :email")})
 public class Admins implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,6 +56,15 @@ public class Admins implements Serializable {
     @Size(max = 255)
     @Column(length = 255)
     private String surname;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(nullable = false, length = 255)
+    private String salt;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 255)
+    @Column(length = 255)
+    private String email;
 
     public Admins() {
     }
@@ -62,10 +73,11 @@ public class Admins implements Serializable {
         this.id = id;
     }
 
-    public Admins(Integer id, String username, String password) {
+    public Admins(Integer id, String username, String password, String salt) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.salt = salt;
     }
 
     public Integer getId() {
@@ -106,6 +118,22 @@ public class Admins implements Serializable {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

@@ -37,9 +37,9 @@ public class Usergroupreview implements Serializable {
     @JoinColumn(name = "user", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Users user;
-    @JoinColumn(name = "group", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "groupp", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Groups group1;
+    private Groups groupp;
     @JoinColumn(name = "review", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Reviews review;
@@ -67,12 +67,12 @@ public class Usergroupreview implements Serializable {
         this.user = user;
     }
 
-    public Groups getGroup1() {
-        return group1;
+    public Groups getGroupp() {
+        return groupp;
     }
 
-    public void setGroup1(Groups group1) {
-        this.group1 = group1;
+    public void setGroupp(Groups groupp) {
+        this.groupp = groupp;
     }
 
     public Reviews getReview() {

@@ -46,7 +46,7 @@ public class Groups implements Serializable {
     @Size(min = 1, max = 255)
     @Column(nullable = false, length = 255)
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "group1")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupp")
     private List<Usergroupreview> usergroupreviewList;
     @JoinColumn(name = "project", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
