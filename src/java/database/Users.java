@@ -72,6 +72,8 @@ public class Users implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Usergroupreview> usergroupreviewList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Tokens> tokensList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Usersgroups> usersgroupsList;
 
     public Users() {
@@ -151,6 +153,15 @@ public class Users implements Serializable {
 
     public void setUsergroupreviewList(List<Usergroupreview> usergroupreviewList) {
         this.usergroupreviewList = usergroupreviewList;
+    }
+
+    @XmlTransient
+    public List<Tokens> getTokensList() {
+        return tokensList;
+    }
+
+    public void setTokensList(List<Tokens> tokensList) {
+        this.tokensList = tokensList;
     }
 
     @XmlTransient
