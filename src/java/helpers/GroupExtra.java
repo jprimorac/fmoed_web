@@ -15,7 +15,7 @@ import java.util.List;
 public class GroupExtra {
     private int id;
     private String name;
-    private List<Reviews> reviews;
+    private List<ReviewUser> reviews;
 
     public int getId() {
         return id;
@@ -33,11 +33,11 @@ public class GroupExtra {
         this.name = name;
     }
 
-    public List<Reviews> getReviews() {
+    public List<ReviewUser> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Reviews> reviews) {
+    public void setReviews(List<ReviewUser> reviews) {
         this.reviews = reviews;
     }
     

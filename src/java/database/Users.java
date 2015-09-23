@@ -122,6 +122,7 @@ public class Users implements Serializable {
         this.surname = surname;
     }
 
+    @XmlTransient
     public String getPassword() {
         return password;
     }
@@ -130,6 +131,7 @@ public class Users implements Serializable {
         this.password = password;
     }
 
+    @XmlTransient
     public String getSalt() {
         return salt;
     }
