@@ -10,7 +10,8 @@
     <h:head>
         <title>Projects</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
+        <script type="text/javascript" src="../js/libs/bootstrap-rating.min.js"></script>
+        <link href="../js/libs/bootstrap-rating.css" rel="stylesheet"/>
     </h:head>
     <h:body>
         <ui:include src="/admin/adminMenu.xhtml"/>
@@ -27,19 +28,17 @@
                     <b:column col-md="8">
                         <h1>#{viewProjectBean.project.name}</h1>
                         <h1 style="margin-top: -7px"><small>Project Details</small></h1>
+                        <input type="hidden" class="rating" data-filled="fa fa-star fa-2x" data-empty="fa fa-star-o fa-2x" disabled="disabled" value="#{viewProjectBean.rating}"/>
                         <p style="margin-top: 30px">#{viewProjectBean.project.description}</p>
 
                     </b:column>
                 </b:row>
-                <b:row class="breadcrumb" style="margin-top: -50px">
+                <!--<b:row class="breadcrumb" style="margin-top: -50px">
                     <div class="pull-right">
-                        <h2>Rating <small class="text-primary" style="font-size: xx-large"> 
-                                <h:outputText value="#{viewProjectBean.rating}">
-                                    <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
-                                </h:outputText>
-                            </small></h2>
+                        <h2>Rating</h2>
+                        <input type="hidden" class="rating" data-filled="fa fa-star fa-2x" data-empty="fa fa-star-o fa-2x" disabled="disabled" value="#{viewProjectBean.rating}"/>
                     </div>
-                </b:row>
+                </b:row>-->
 
                 <br/><br/>
 
@@ -57,10 +56,11 @@
                                                     <h:outputText value="Group" />
                                                 </f:facet>
                                                 <h:outputText value="#{group.name}" />
-                                                <h:outputText class="pull-right" value="#{viewProjectBean.getGroupAvgRating(group)}">
-                                                    <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
-                                                </h:outputText>
-
+                                                <div class="pull-right">
+                                                    <input type="hidden" class="rating" 
+                                                           data-filled="fa fa-star fa-1x" data-empty="fa fa-star-o fa-1x" disabled="disabled" 
+                                                           value="#{viewProjectBean.getGroupAvgRating(group)}"/>
+                                                </div>
                                             </p:column>
                                         </p:dataTable> 
                                     </b:row>
@@ -93,11 +93,15 @@
                                                     <tbody class="row">
                                                         <ui:repeat var="reviews" value="#{group.reviewsList}">
                                                             <tr>
-                                                                <td class="col-sm-6">#{reviews.comment}</td>
-                                                                <td class="col-sm-1" >
-                                                                    <h:outputText value="#{reviews.rating}">
-                                                                        <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
-                                                                    </h:outputText>
+                                                                <td class="col-sm-5">#{reviews.comment}</td>
+                                                                <td class="col-sm-2" >
+                                                                    <input type="hidden" class="rating" 
+                                                                           data-filled="fa fa-star fa-1x" data-empty="fa fa-star-o fa-1x" disabled="disabled" 
+                                                                           value="#{viewProjectBean.getGroupAvgRating(group)}"/>
+                                                                    <small><h:outputText value="(#{reviews.rating})">
+                                                                            <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
+                                                                        </h:outputText>
+                                                                    </small>
                                                                 </td>
                                                                 <td class="col-sm-2">#{reviews.user.name}</td>
                                                                 <td class="col-sm-1">

@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpSession;
 @ManagedBean
 @SessionScoped
 public class LoginBean {
+
     @EJB
     private AdminsFacade adminsFacade;
 
@@ -42,6 +44,10 @@ public class LoginBean {
     private String password;
     private String usernameError;
     private String passwordError;
+
+    private boolean isUsernameValid;
+    private boolean isPasswordValid;
+    private boolean validationComplete = false;
 
     @PostConstruct
     public void onView() {
@@ -69,6 +75,14 @@ public class LoginBean {
     }
 
     public String loginUser() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if ("admin".equals(username) && "pass".equals(password)) {
+
+        } else {
+            facesContext.addMessage("loginForm", new FacesMessage("Username or password is incorrect"));
+
+        }
+
         if (username != null) {
             if (username.equals("")) {
                 usernameError = "Insert username.";
@@ -94,11 +108,11 @@ public class LoginBean {
         HttpServletRequest request = (HttpServletRequest) (FacesContext.getCurrentInstance().getExternalContext().getRequest());
         HttpSession session = request.getSession();
         String returnString = "";
-            session.setAttribute("user", username);
-            session.setAttribute("userTypeName", "admin");
-            session.setAttribute("userObject", user);
-            returnString = "ADMIN";
-        
+        session.setAttribute("user", username);
+        session.setAttribute("userTypeName", "admin");
+        session.setAttribute("userObject", user);
+        returnString = "ADMIN";
+
         return returnString;
     }
 
@@ -112,16 +126,16 @@ public class LoginBean {
         return false;
     }
 
-    private void redirectToLogin(){
+    private void redirectToLogin() {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-                try {
-                    context.redirect(context.getRequestContextPath() + "/faces/login.xhtml");
-                } catch (IOException ex) {
-                    Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        try {
+            context.redirect(context.getRequestContextPath() + "/faces/login.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    public void logOut(){
+
+    public void logOut() {
         HttpServletRequest request = (HttpServletRequest) (FacesContext.getCurrentInstance().getExternalContext().getRequest());
         HttpSession session = request.getSession();
         session.invalidate();
@@ -158,6 +172,60 @@ public class LoginBean {
 
     public void setPasswordError(String passwordError) {
         this.passwordError = passwordError;
+    }
+
+    public boolean getIsUsernameValid() {
+        return isUsernameValid;
+    }
+
+    /**
+     * @paramisUsernameValid the isUsernameValid to set
+     */
+    public void setUsernameValid(boolean isUsernameValid) {
+        this.isUsernameValid = isUsernameValid;
+    }
+
+    /**
+     * @return the isPasswordValid
+     */
+    public boolean getIsPasswordValid() {
+        return isPasswordValid;
+    }
+
+    /**
+     * @paramisPasswordValid the isPasswordValid to set
+     */
+    public void setPasswordValid(boolean isPasswordValid) {
+        this.isPasswordValid = isPasswordValid;
+    }
+
+    /**
+     * @return the validationComplete
+     */
+    public boolean getValidationComplete() {
+        return validationComplete;
+    }
+
+    /**
+     * @paramvalidationComplete the validationComplete to set
+     */
+    public void setValidationComplete(boolean validationComplete) {
+        this.validationComplete = validationComplete;
+    }
+
+    public String checkValidity() {
+        if (this.username == null || this.username.equals("")) {
+            isUsernameValid = false;
+        } else {
+            isUsernameValid = true;
+        }
+        if (this.password == null || this.password.equals("")) {
+            isPasswordValid = false;
+        } else {
+            isPasswordValid = true;
+        }
+        validationComplete = true;
+        return "success";
     }
 
 }
