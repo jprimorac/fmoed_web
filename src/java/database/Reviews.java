@@ -6,6 +6,7 @@
 package database;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -14,9 +15,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -32,8 +37,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Reviews.findById", query = "SELECT r FROM Reviews r WHERE r.id = :id"),
     @NamedQuery(name = "Reviews.findByName", query = "SELECT r FROM Reviews r WHERE r.name = :name"),
     @NamedQuery(name = "Reviews.findByComment", query = "SELECT r FROM Reviews r WHERE r.comment = :comment"),
-    @NamedQuery(name = "Reviews.findByGrade", query = "SELECT r FROM Reviews r WHERE r.grade = :grade"),
-    @NamedQuery(name = "Reviews.findByType", query = "SELECT r FROM Reviews r WHERE r.type = :type")})
+    @NamedQuery(name = "Reviews.findByRating", query = "SELECT r FROM Reviews r WHERE r.rating = :rating"),
+    @NamedQuery(name = "Reviews.findByType", query = "SELECT r FROM Reviews r WHERE r.type = :type"),
+    @NamedQuery(name = "Reviews.findByLatitude", query = "SELECT r FROM Reviews r WHERE r.latitude = :latitude"),
+    @NamedQuery(name = "Reviews.findByLongitude", query = "SELECT r FROM Reviews r WHERE r.longitude = :longitude"),
+    @NamedQuery(name = "Reviews.findByTime", query = "SELECT r FROM Reviews r WHERE r.time = :time")})
 public class Reviews implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,10 +55,26 @@ public class Reviews implements Serializable {
     @Size(max = 255)
     @Column(length = 255)
     private String comment;
-    private Integer grade;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(precision = 22)
+    private Double rating;
     private Integer type;
+    @Size(max = 255)
+    @Column(length = 255)
+    private String latitude;
+    @Size(max = 255)
+    @Column(length = 255)
+    private String longitude;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "review")
     private List<Usergroupreview> usergroupreviewList;
+    @JoinColumn(name = "groupp", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false)
+    private Groups groupp;
+    @JoinColumn(name = "user", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false)
+    private Users user;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "review")
     private List<Files> filesList;
 
@@ -85,12 +109,12 @@ public class Reviews implements Serializable {
         this.comment = comment;
     }
 
-    public Integer getGrade() {
-        return grade;
+    public Double getRating() {
+        return rating;
     }
 
-    public void setGrade(Integer grade) {
-        this.grade = grade;
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public Integer getType() {
@@ -101,6 +125,30 @@ public class Reviews implements Serializable {
         this.type = type;
     }
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
     @XmlTransient
     public List<Usergroupreview> getUsergroupreviewList() {
         return usergroupreviewList;
@@ -108,6 +156,22 @@ public class Reviews implements Serializable {
 
     public void setUsergroupreviewList(List<Usergroupreview> usergroupreviewList) {
         this.usergroupreviewList = usergroupreviewList;
+    }
+
+    public Groups getGroupp() {
+        return groupp;
+    }
+
+    public void setGroupp(Groups groupp) {
+        this.groupp = groupp;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
     }
 
     @XmlTransient

@@ -48,6 +48,8 @@ public class Groups implements Serializable {
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupp")
     private List<Usergroupreview> usergroupreviewList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupp")
+    private List<Reviews> reviewsList;
     @JoinColumn(name = "project", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Projects project;
@@ -89,6 +91,15 @@ public class Groups implements Serializable {
 
     public void setUsergroupreviewList(List<Usergroupreview> usergroupreviewList) {
         this.usergroupreviewList = usergroupreviewList;
+    }
+
+    @XmlTransient
+    public List<Reviews> getReviewsList() {
+        return reviewsList;
+    }
+
+    public void setReviewsList(List<Reviews> reviewsList) {
+        this.reviewsList = reviewsList;
     }
 
     public Projects getProject() {

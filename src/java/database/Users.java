@@ -72,6 +72,8 @@ public class Users implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Usergroupreview> usergroupreviewList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Reviews> reviewsList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Tokens> tokensList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Usersgroups> usersgroupsList;
@@ -122,7 +124,6 @@ public class Users implements Serializable {
         this.surname = surname;
     }
 
-    @XmlTransient
     public String getPassword() {
         return password;
     }
@@ -131,7 +132,6 @@ public class Users implements Serializable {
         this.password = password;
     }
 
-    @XmlTransient
     public String getSalt() {
         return salt;
     }
@@ -155,6 +155,15 @@ public class Users implements Serializable {
 
     public void setUsergroupreviewList(List<Usergroupreview> usergroupreviewList) {
         this.usergroupreviewList = usergroupreviewList;
+    }
+
+    @XmlTransient
+    public List<Reviews> getReviewsList() {
+        return reviewsList;
+    }
+
+    public void setReviewsList(List<Reviews> reviewsList) {
+        this.reviewsList = reviewsList;
     }
 
     @XmlTransient

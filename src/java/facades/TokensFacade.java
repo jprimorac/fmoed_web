@@ -51,4 +51,20 @@ public class TokensFacade extends AbstractFacade<Tokens> {
             return tokens.get(0);
         }
     }
+    
+    public Tokens getTokenByToken(String tokenString){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Tokens> cq = cb.createQuery(Tokens.class);
+        Root<Tokens> a = cq.from(Tokens.class);
+        Predicate uvjet = cb.equal(a.get(Tokens_.token), tokenString);
+        cq.where(uvjet);
+        TypedQuery<Tokens> q = em.createQuery(cq);
+        List<Tokens> tokens = q.getResultList();
+        if(tokens.isEmpty()){
+            return null;
+        }
+        else{
+            return tokens.get(0);
+        }
+    }
 }

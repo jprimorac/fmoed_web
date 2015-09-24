@@ -78,6 +78,20 @@ public class LoginData {
         }
         return token;
     }
+    
+    public Tokens checkToken(String tokenString) {
+        Tokens token = tokensFacade.getTokenByToken(tokenString);
+        if (token != null) {
+            Date date = token.getDate();
+            Date twoHours = new Date(System.currentTimeMillis() - 7200000);
+            if (date.before(twoHours)) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+        return token;
+    }
 
     private TokensFacade lookupTokensFacadeBean() {
         try {
