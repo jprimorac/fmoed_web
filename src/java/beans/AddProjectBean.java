@@ -69,6 +69,9 @@ public class AddProjectBean {
 
     public void addNewProject() {
         project.setImageLocation(" ");
+        project.setThumbnailLocation(" ");
+        project.setLatitude(" ");
+        project.setLongitude(" ");
         projectsFacade.create(project);
         project.setGroupsList(listGroups);
         projectsFacade.edit(project);
@@ -104,6 +107,8 @@ public class AddProjectBean {
                 }
                 
                 project.setImageLocation("http://128.199.32.207/Reviewer/images/" + project.getName() + ".jpg");
+                project.setThumbnailLocation("http://128.199.32.207/Reviewer/images/" + project.getName() + "_t.jpg");
+                projectsFacade.edit(project);
 
                 BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
                 img.createGraphics().drawImage(ImageIO.read(new File(fullPath + "/" + project.getName() + ".jpg")).getScaledInstance(100, 100, Image.SCALE_SMOOTH), 0, 0, null);

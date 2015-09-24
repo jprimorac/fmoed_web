@@ -10,6 +10,7 @@ import database.Projects;
 import database.Reviews;
 import database.Users;
 import database.Usersgroups;
+import facades.GroupsFacade;
 import facades.ProjectsFacade;
 import facades.UsersFacade;
 import facades.UsersgroupsFacade;
@@ -31,20 +32,23 @@ import javax.faces.context.FacesContext;
  * @author Marko
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class ViewProjectBean {
+    @EJB
+    private GroupsFacade groupsFacade;
+
     @EJB
     private UsersgroupsFacade usersgroupsFacade;
     @EJB
     private UsersFacade usersFacade;
 
-    
-
     @EJB
     private ProjectsFacade projectsFacade;
-    private static Projects project;
-    private static double rating;
+    private Projects project;
+    private double rating;
     private boolean chosen = false;
+    
+    private Groups newGroup;
 
     private Users chosenUser;
     private Groups chosenGroup;
@@ -55,16 +59,18 @@ public class ViewProjectBean {
      * Creates a new instance of viewProject
      */
     public ViewProjectBean() {
-        
 
     }
-    
+
     @PostConstruct
-    public void checkChosenCheck(){
+    public void checkChosenCheck() {
         checkChosen();
         if (chosen) {
             refreshProjectGroups();
         }
+        chosenGroup = new Groups();
+        chosenUser = new Users();
+        newGroup = new Groups();
     }
 
     public void checkChosen() {
@@ -104,11 +110,11 @@ public class ViewProjectBean {
 
         allOtherUsers = new ArrayList<>();
         List<Users> allUsers = usersFacade.findAll();
-        
-        if(allUsers!=null && !allUsers.isEmpty())
-            allOtherUsers.addAll(allUsers);
 
-        
+        if (allUsers != null && !allUsers.isEmpty()) {
+            allOtherUsers.addAll(allUsers);
+        }
+
         for (Users userAll : allUsers) {
             for (Users userInProject : getProjectUsers()) {
                 if (userAll.getId().equals(userInProject.getId())) {
@@ -132,16 +138,26 @@ public class ViewProjectBean {
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void addUserToGroup(){
+
+    public void addUserToGroup() {
         System.out.println("Prolazi addUserToGroup");
         Usersgroups newUsersGroup = new Usersgroups();
         System.out.println(chosenGroup.getName());
         System.out.println(chosenUser.getUsername());
+        chosenUser = usersFacade.find(chosenUser.getId());
+        for(Groups g : project.getGroupsList()){
+            if(g.getId()==chosenGroup.getId())
+                chosenGroup = g;
+        }
         newUsersGroup.setGroup1(chosenGroup);
         newUsersGroup.setUser(chosenUser);
         usersgroupsFacade.create(newUsersGroup);
+        chosenGroup.getUsersgroupsList().add(newUsersGroup);
+        groupsFacade.edit(chosenGroup);
+        getProjectUsers();
+        refreshProjectGroups();
     }
+
     public double getRating() {
         return rating;
     }
@@ -166,6 +182,15 @@ public class ViewProjectBean {
             }
         }
         return users;
+    }
+    
+    public void addGroup(){
+        newGroup.setProject(project);
+        groupsFacade.create(newGroup);
+        project.getGroupsList().add(newGroup);
+        newGroup = new Groups();
+        getProjectUsers();
+        refreshProjectGroups();
     }
 
     public Users getChosenUser() {
@@ -200,5 +225,14 @@ public class ViewProjectBean {
         this.chosenGroup = chosenGroup;
     }
 
+    public Groups getNewGroup() {
+        return newGroup;
+    }
+
+    public void setNewGroup(Groups newGroup) {
+        this.newGroup = newGroup;
+    }
     
+    
+
 }

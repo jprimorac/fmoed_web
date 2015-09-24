@@ -85,23 +85,34 @@
                                     </b:row>
 
                                     <b:row>
+                                        <h4>Add group:</h4>
+                                        <h:form id="formaGroup" enctype="multipart/form-data">
+                                            <h:panelGrid columns="2" cellpadding="5">
+                                                <h5>Group name</h5>
+                                                <h:inputText value="#{viewProjectBean.newGroup.name}"/>
+                                                <p:commandButton update="@all" type="submit" class="btn btn-primary btn-block" value="Add group" action="#{viewProjectBean.addGroup()}" 
+                                                                 style="width: 150px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px">
+                                                    <f:ajax />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+                                        </h:form>
                                         <h4>Add user to group:</h4>
                                         <h:form id="formaUsers" enctype="multipart/form-data">
                                             <h:panelGrid columns="2" cellpadding="5">
                                                 <h5>User</h5>
-                                                <h:selectOneMenu id="chosenUser" value="#{viewProjectBean.chosenUser}" >
+                                                <h:selectOneMenu id="chosenUser" value="#{viewProjectBean.chosenUser.id}" >
                                                     <f:selectItems value="#{viewProjectBean.allOtherUsers}" var="y"
-                                                                   itemLabel="#{y.username}" itemValue="#{y}" />
+                                                                   itemLabel="#{y.username}" itemValue="#{y.id}" />
                                                 </h:selectOneMenu>
                                                 <h5>Group</h5>
-                                                <h:selectOneMenu id="chosenGroup" value="#{viewProjectBean.chosenGroup}">
-                                                    <f:selectItems value="#{viewProjectBean.project.groupsList}" var="y"
-                                                                   itemLabel="#{y.name}" itemValue="#{y}" />
+                                                <h:selectOneMenu id="chosenGroup" value="#{viewProjectBean.chosenGroup.id}">
+                                                    <f:selectItems value="#{viewProjectBean.project.groupsList}" var="x"
+                                                                   itemLabel="#{x.name}" itemValue="#{x.id}"/>
                                                 </h:selectOneMenu>
 
-                                                <p:commandButton type="submit" class="btn btn-primary btn-block" value="Add" action="#{viewProjectBean.addUserToGroup()}" 
+                                                <p:commandButton update="@all" type="submit" class="btn btn-primary btn-block" value="Add" action="#{viewProjectBean.addUserToGroup()}" 
                                                                  style="width: 150px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px">
-                                                    <f:ajax render="formaUsers" execute="formaUsers"/>             
+                                                    <f:ajax />
                                                 </p:commandButton>
 
                                             </h:panelGrid>
