@@ -6,18 +6,25 @@
 package service;
 
 import database.Reviews;
+import database.Tokens;
+import database.Users;
+import facades.UsersFacade;
+import helpers.LoginData;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -34,10 +41,19 @@ public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
     }
 
     @POST
-    @Override
     @Consumes({"application/json"})
-    public void create(Reviews entity) {
+    @Produces({"application/json"})
+    public Response create(@HeaderParam("token") String tokenString, Reviews entity) {
+        LoginData login = new LoginData();
+        Tokens token = login.checkToken(tokenString);
+        if(token== null){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        Users user = token.getUser();
+        entity.setUser(user);
+
         super.create(entity);
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
 
 
