@@ -9,6 +9,7 @@ import controllers.PasswordHash;
 import database.Tokens;
 import database.Users;
 import facades.TokensFacade;
+import facades.UsersFacade;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -30,6 +31,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -38,6 +41,8 @@ import javax.ws.rs.Produces;
 @Stateless
 @Path("users")
 public class UsersFacadeREST extends AbstractFacade<Users> {
+    @EJB
+    private UsersFacade usersFacade;
     @EJB
     private TokensFacade tokensFacade;
     @PersistenceContext(unitName = "ReviewerPU")
@@ -48,9 +53,12 @@ public class UsersFacadeREST extends AbstractFacade<Users> {
     }
 
     @POST
-    @Consumes({ "application/json"})
-    @Override
-    public void create(Users entity) {
+    @Consumes({"application/json"})
+    public Response createUser(Users entity){
+            Users old = usersFacade.getUser(entity.getUsername());
+            if(old != null){
+                return javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.CONFLICT).build();
+            }
             String password = entity.getPassword();
             String saltAndHash;
         try {
@@ -63,15 +71,14 @@ public class UsersFacadeREST extends AbstractFacade<Users> {
             Logger.getLogger(UsersFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeySpecException ex) {
             Logger.getLogger(UsersFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                  
+        }       
             Tokens token = new Tokens();
             token.setUser(entity);
             SecureRandom random = new SecureRandom();
             token.setToken(new BigInteger(130, random).toString(32));
             token.setDate(new Date(System.currentTimeMillis()));
-            tokensFacade.create(token);     
-            
+            tokensFacade.create(token);
+            return javax.ws.rs.core.Response.ok().build();
     }
 
     @PUT
@@ -92,13 +99,6 @@ public class UsersFacadeREST extends AbstractFacade<Users> {
     @Produces({"application/xml", "application/json"})
     public Users find(@PathParam("id") Integer id) {
         return super.find(id);
-    }
-
-    @GET
-    @Override
-    @Produces({"application/json"})
-    public List<Users> findAll() {
-        return super.findAll();
     }
 
     @GET

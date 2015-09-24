@@ -92,6 +92,7 @@ public class Users implements Serializable {
         this.salt = salt;
     }
 
+    @XmlTransient
     public Integer getId() {
         return id;
     }
@@ -132,6 +133,7 @@ public class Users implements Serializable {
         this.password = password;
     }
 
+    @XmlTransient
     public String getSalt() {
         return salt;
     }

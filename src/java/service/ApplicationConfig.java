@@ -5,8 +5,10 @@
  */
 package service;
 
+import com.sun.jersey.multipart.MultiPart;
 import java.util.Set;
 import javax.ws.rs.core.Application;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 /**
  *
@@ -22,6 +24,9 @@ public class ApplicationConfig extends Application {
         return resources;
     }
 
+    
+    
+
     /**
      * Do not modify addRestResourceClasses() method.
      * It is automatically populated with
@@ -29,6 +34,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(service.ImageResource.class);
         resources.add(service.LoginResource.class);
         resources.add(service.ProjectsFacadeREST.class);
         resources.add(service.ReviewsFacadeREST.class);
