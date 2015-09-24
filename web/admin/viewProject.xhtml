@@ -40,22 +40,81 @@
                                 <b:inputText value="#{viewProjectBean.project.imageLocation}" readonly="true" />
                             </b:panelGrid>
 
+                            <h2>Rating <small class="text-primary" style="font-size: xx-large"> 
+                                    <h:outputText value="#{viewProjectBean.rating}">
+                                        <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
+                                    </h:outputText>
+                                </small></h2>
+
                             <b:panelGrid colSpans="4,8">
-                                <p:dataTable var="group" value="#{viewProjectBean.project.groupsList}">
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Group" />
-                                        </f:facet>
-                                        <h:outputText value="#{group.name}" />
-                                    </p:column>
-                                </p:dataTable> 
+                                <b:column>
+                                    <b:row>
+                                        <p:dataTable var="group" value="#{viewProjectBean.project.groupsList}">
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Group" />
+                                                </f:facet>
+                                                <h:outputText value="#{group.name}" />
+                                                <h:outputText class="pull-right" value="#{viewProjectBean.getGroupAvgRating(group)}">
+                                                    <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
+                                                </h:outputText>
+
+                                            </p:column>
+                                        </p:dataTable> 
+                                    </b:row>
+                                    <b:row >
+                                        <p:dataTable var="users" value="#{viewProjectBean.getProjectUsers()}">
+                                            <p:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Users" />
+                                                </f:facet>
+                                                <h:outputText value="#{users.name}" />
+                                                <h:outputText class="pull-right" value=" ">
+                                                    <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
+                                                </h:outputText>
+
+                                            </p:column>
+                                        </p:dataTable> 
+                                    </b:row>
+                                </b:column>
+
+                                <b:column>
+                                    <ui:repeat var="group" value="#{viewProjectBean.project.groupsList}">
+                                        <table class="table table-striped">
+                                            <thead >
+                                                <h2 style="padding-left: 10px"><small>#{group.name} Reviews </small></h2>
+                                            </thead>
+                                            <tbody class="row">
+                                                <ui:repeat var="reviews" value="#{group.reviewsList}">
+                                                    <tr>
+                                                        <td class="col-sm-6">#{reviews.comment}</td>
+                                                        <td class="col-sm-1" >
+                                                            <h:outputText value="#{reviews.rating}">
+                                                                <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="col-sm-2">#{reviews.user.name}</td>
+                                                        <td class="col-sm-1">
+                                                            <h:form>
+                                                                <h:commandLink action=" " >
+                                                                    <i class="glyphicon glyphicon-edit"></i>
+                                                                </h:commandLink>
+                                                            </h:form>
+                                                        </td>
+
+                                                    </tr>
+                                                </ui:repeat>
+                                            </tbody>
+                                        </table>
+                                    </ui:repeat>>        
+                                </b:column>
                             </b:panelGrid>
                         </h:form>
                     </h:panelGroup> 
                 </h:panelGroup> 
             </c:if>
             <c:if test="${chosen == false}">
-                <h2>No user</h2>
+                <h2>No Project chosen</h2>
             </c:if>
         </b:container>
     </h:body>
