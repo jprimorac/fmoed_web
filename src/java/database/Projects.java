@@ -74,6 +74,30 @@ public class Projects implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private List<Groups> groupsList;
 
+    public String getThumbnailLocation() {
+        return thumbnailLocation;
+    }
+
+    public void setThumbnailLocation(String thumbnailLocation) {
+        this.thumbnailLocation = thumbnailLocation;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
     public Projects() {
     }
 

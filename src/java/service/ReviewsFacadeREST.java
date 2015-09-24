@@ -7,11 +7,16 @@ package service;
 
 import helpers.Konstante;
 import database.Files;
+import database.Groups;
+import database.Projects;
 import database.Reviews;
 import database.Tokens;
 import database.Users;
+import database.Usersgroups;
 import facades.FilesFacade;
 import facades.GroupsFacade;
+import facades.ProjectsFacade;
+import facades.UsersgroupsFacade;
 import helpers.IdKlasa;
 import helpers.LoginData;
 import helpers.ReviewGet;
@@ -51,9 +56,12 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("reviews")
 public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
     @EJB
-    private FilesFacade filesFacade;
+    private ProjectsFacade projectsFacade;
     @EJB
-    private GroupsFacade groupsFacade;
+    private FilesFacade filesFacade;
+    
+    
+
     @PersistenceContext(unitName = "ReviewerPU")
     private EntityManager em;
     
@@ -68,7 +76,7 @@ public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces({"application/json"})
     public Response create( @FormDataParam("file") InputStream inputStream, @FormDataParam("token") String tokenString,
-                            @FormDataParam("groupId") int groupId, @FormDataParam("comment") String comment, @FormDataParam("rating") double rating,
+                            @FormDataParam("projectId") int projectId, @FormDataParam("comment") String comment, @FormDataParam("rating") double rating,
                             @FormDataParam("time") String time, @FormDataParam("latitude") String latitude, @FormDataParam("longitude") String longitude) {
         LoginData login = new LoginData();
         Tokens token = login.checkToken(tokenString);
@@ -83,7 +91,15 @@ public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
         //entity.setTime(time);
         entity.setLatitude(latitude);
         entity.setLongitude(longitude);
-        entity.setGroupp(groupsFacade.find(groupId));
+        Projects project = projectsFacade.find(projectId);
+        for(Groups g : project.getGroupsList()){
+            for(Usersgroups ug : g.getUsersgroupsList()){
+                if(ug.getUser() == user){
+                    entity.setGroupp(g);
+                }
+            }
+        }
+        
         entity.setUser(user);
         super.create(entity);
         em.getEntityManagerFactory().getCache().evictAll();
