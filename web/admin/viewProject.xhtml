@@ -44,7 +44,7 @@
 
                 <h:panelGroup id="mainPanel">
                     <h:panelGroup layout="block">
-                        <h:form>
+                        
 
 
                             <b:panelGrid colSpans="4,8">
@@ -64,6 +64,10 @@
                                             </p:column>
                                         </p:dataTable> 
                                     </b:row>
+
+
+
+
                                     <br/>
                                     <b:row >
                                         <p:dataTable var="users" value="#{viewProjectBean.getProjectUsers()}">
@@ -79,6 +83,32 @@
                                             </p:column>
                                         </p:dataTable> 
                                     </b:row>
+
+                                    <b:row>
+                                        <h4>Add user to group:</h4>
+                                        <h:form id="formaUsers" enctype="multipart/form-data">
+                                            <h:panelGrid columns="2" cellpadding="5">
+                                                <h5>User</h5>
+                                                <h:selectOneMenu id="chosenUser" value="#{viewProjectBean.chosenUser}" >
+                                                    <f:selectItems value="#{viewProjectBean.allOtherUsers}" var="y"
+                                                                   itemLabel="#{y.username}" itemValue="#{y}" />
+                                                </h:selectOneMenu>
+                                                <h5>Group</h5>
+                                                <h:selectOneMenu id="chosenGroup" value="#{viewProjectBean.chosenGroup}">
+                                                    <f:selectItems value="#{viewProjectBean.project.groupsList}" var="y"
+                                                                   itemLabel="#{y.name}" itemValue="#{y}" />
+                                                </h:selectOneMenu>
+
+                                                <p:commandButton type="submit" class="btn btn-primary btn-block" value="Add" action="#{viewProjectBean.addUserToGroup()}" 
+                                                                 style="width: 150px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px">
+                                                    <f:ajax render="formaUsers" execute="formaUsers"/>             
+                                                </p:commandButton>
+
+                                            </h:panelGrid>
+                                        </h:form>
+                                    </b:row>  
+
+
                                 </b:column>
 
                                 <b:column>
@@ -97,7 +127,7 @@
                                                                 <td class="col-sm-2" >
                                                                     <input type="hidden" class="rating" 
                                                                            data-filled="fa fa-star fa-1x" data-empty="fa fa-star-o fa-1x" disabled="disabled" 
-                                                                           value="#{viewProjectBean.getGroupAvgRating(group)}"/>
+                                                                           value="#{reviews.rating}"/>
                                                                     <small><h:outputText value="(#{reviews.rating})">
                                                                             <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
                                                                         </h:outputText>
@@ -120,7 +150,7 @@
                                     </b:row>
                                 </b:column>
                             </b:panelGrid>
-                        </h:form>
+                        
                     </h:panelGroup> 
                 </h:panelGroup> 
             </c:if>

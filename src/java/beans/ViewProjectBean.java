@@ -8,22 +8,23 @@ package beans;
 import database.Groups;
 import database.Projects;
 import database.Reviews;
-import database.Usergroupreview;
 import database.Users;
 import database.Usersgroups;
 import facades.ProjectsFacade;
+import facades.UsersFacade;
+import facades.UsersgroupsFacade;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import jdk.nashorn.internal.runtime.RewriteException;
 
 /**
  *
@@ -32,6 +33,12 @@ import jdk.nashorn.internal.runtime.RewriteException;
 @ManagedBean
 @RequestScoped
 public class ViewProjectBean {
+    @EJB
+    private UsersgroupsFacade usersgroupsFacade;
+    @EJB
+    private UsersFacade usersFacade;
+
+    
 
     @EJB
     private ProjectsFacade projectsFacade;
@@ -39,15 +46,25 @@ public class ViewProjectBean {
     private static double rating;
     private boolean chosen = false;
 
+    private Users chosenUser;
+    private Groups chosenGroup;
+    private List<Users> allOtherUsers = null;
+    private List<Groups> groupsOfThisProject = null;
+
     /**
      * Creates a new instance of viewProject
      */
     public ViewProjectBean() {
+        
+
+    }
+    
+    @PostConstruct
+    public void checkChosenCheck(){
         checkChosen();
         if (chosen) {
             refreshProjectGroups();
         }
-
     }
 
     public void checkChosen() {
@@ -85,6 +102,22 @@ public class ViewProjectBean {
         System.out.println("Test");
         System.out.println("Pr:" + project.getName());
 
+        allOtherUsers = new ArrayList<>();
+        List<Users> allUsers = usersFacade.findAll();
+        
+        if(allUsers!=null && !allUsers.isEmpty())
+            allOtherUsers.addAll(allUsers);
+
+        
+        for (Users userAll : allUsers) {
+            for (Users userInProject : getProjectUsers()) {
+                if (userAll.getId().equals(userInProject.getId())) {
+                    if (!allOtherUsers.isEmpty()) {
+                        allOtherUsers.remove(userAll);
+                    }
+                }
+            }
+        }
     }
 
     public void viewProject(Projects project) {
@@ -99,7 +132,16 @@ public class ViewProjectBean {
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    public void addUserToGroup(){
+        System.out.println("Prolazi addUserToGroup");
+        Usersgroups newUsersGroup = new Usersgroups();
+        System.out.println(chosenGroup.getName());
+        System.out.println(chosenUser.getUsername());
+        newUsersGroup.setGroup1(chosenGroup);
+        newUsersGroup.setUser(chosenUser);
+        usersgroupsFacade.create(newUsersGroup);
+    }
     public double getRating() {
         return rating;
     }
@@ -115,13 +157,48 @@ public class ViewProjectBean {
         }
         return groupRate / g.getReviewsList().size();
     }
-    public List<Users> getProjectUsers(){
+
+    public List<Users> getProjectUsers() {
         List<Users> users = new ArrayList<>();
-        for(Groups g:project.getGroupsList()){
-            for(Usersgroups ug:g.getUsersgroupsList())
-            users.add(ug.getUser());
+        for (Groups g : project.getGroupsList()) {
+            for (Usersgroups ug : g.getUsersgroupsList()) {
+                users.add(ug.getUser());
+            }
         }
         return users;
     }
 
+    public Users getChosenUser() {
+        return chosenUser;
+    }
+
+    public void setChosenUser(Users chosenUser) {
+        this.chosenUser = chosenUser;
+    }
+
+    public List<Users> getAllOtherUsers() {
+        return allOtherUsers;
+    }
+
+    public void setAllOtherUsers(List<Users> allOtherUsers) {
+        this.allOtherUsers = allOtherUsers;
+    }
+
+    public List<Groups> getGroupsOfThisProject() {
+        return groupsOfThisProject;
+    }
+
+    public void setGroupsOfThisProject(List<Groups> groupsOfThisProject) {
+        this.groupsOfThisProject = groupsOfThisProject;
+    }
+
+    public Groups getChosenGroup() {
+        return chosenGroup;
+    }
+
+    public void setChosenGroup(Groups chosenGroup) {
+        this.chosenGroup = chosenGroup;
+    }
+
+    
 }
