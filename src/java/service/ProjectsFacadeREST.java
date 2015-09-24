@@ -84,7 +84,7 @@ public class ProjectsFacadeREST extends AbstractFacade<Projects> {
                 ru.setId(ugr.getReview().getId());
                 ru.setName(ugr.getReview().getName());
                 ru.setComment(ugr.getReview().getComment());
-                ru.setRating(ugr.getReview().getGrade());
+                ru.setRating(ugr.getReview().getRating());
                 ru.setUser(ugr.getUser());
                 reviews.add(ru); 
             }
