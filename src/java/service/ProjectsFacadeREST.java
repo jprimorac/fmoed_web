@@ -77,15 +77,16 @@ public class ProjectsFacadeREST extends AbstractFacade<Projects> {
             GroupExtra group = new GroupExtra();
             group.setId(g.getId());
             group.setName(g.getName());
+            
             List<ReviewUser> reviews = new ArrayList<>();
             List<Usergroupreview> ugrs = g.getUsergroupreviewList();
-            for(Usergroupreview ugr : ugrs){
+            for(Reviews r : g.getReviewsList()){
                 ReviewUser ru = new ReviewUser();
-                ru.setId(ugr.getReview().getId());
-                ru.setName(ugr.getReview().getName());
-                ru.setComment(ugr.getReview().getComment());
-                ru.setRating(ugr.getReview().getRating());
-                ru.setUser(ugr.getUser());
+                ru.setId(r.getId());
+                ru.setName(r.getName());
+                ru.setComment(r.getComment());
+                ru.setRating(r.getRating());
+                ru.setUser(r.getUser());
                 reviews.add(ru); 
             }
             group.setReviews(reviews);

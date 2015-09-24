@@ -37,7 +37,7 @@ public class Usersgroups implements Serializable {
     @JoinColumn(name = "user", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Users user;
-    @JoinColumn(name = "group", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "groupp", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Groups group1;
 

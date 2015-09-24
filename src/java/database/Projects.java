@@ -54,8 +54,23 @@ public class Projects implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1000)
-    @Column(name = "image_location", nullable = false, length = 1000)
+    @Column(name = "image_location", nullable = true, length = 1000)
     private String imageLocation;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1000)
+    @Column(name = "thumbnail_location", nullable = true, length = 1000)
+    private String thumbnailLocation;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1000)
+    @Column(name = "latitude", nullable = true, length = 1000)
+    private String latitude;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1000)
+    @Column(name = "longitude", nullable = true, length = 1000)
+    private String longitude;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private List<Groups> groupsList;
 
