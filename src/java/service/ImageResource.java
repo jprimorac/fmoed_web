@@ -5,7 +5,8 @@
  */
 package service;
 
-import com.sun.jersey.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import database.Files;
 import database.Reviews;
 import facades.FilesFacade;
@@ -42,7 +43,7 @@ public class ImageResource {
     ReviewsFacade reviewsFacade = lookupReviewsFacadeBean();
 
     @Context
-    private UriInfo context;
+    private ServletContext context;
 
     /**
      * Creates a new instance of ImageResource
@@ -81,7 +82,6 @@ public class ImageResource {
     private void savePicture(InputStream inputStream, Reviews review) {
         if (inputStream != null) {
             try {
-                ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
                 String fullPath = context.getRealPath("/images/reviews/");
                 File yourFile = new File(fullPath + "/" + review.getId() + ".jpg");
                 if (!yourFile.exists()) {

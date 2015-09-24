@@ -20,6 +20,7 @@ public class ApplicationConfig extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
+        resources.add(MultiPartFeature.class);
         addRestResourceClasses(resources);
         return resources;
     }
@@ -34,8 +35,6 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(MultiPart.class);
-        register(MultiPartFeature.class);
         resources.add(service.ImageResource.class);
         resources.add(service.LoginResource.class);
         resources.add(service.ProjectsFacadeREST.class);
