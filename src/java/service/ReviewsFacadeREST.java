@@ -5,6 +5,7 @@
  */
 package service;
 
+import helpers.Konstante;
 import database.Files;
 import database.Reviews;
 import database.Tokens;
@@ -19,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +39,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.core.Context;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -46,41 +51,78 @@ import javax.ws.rs.FormParam;
 @Path("reviews")
 public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
     @EJB
+    private FilesFacade filesFacade;
+    @EJB
     private GroupsFacade groupsFacade;
     @PersistenceContext(unitName = "ReviewerPU")
     private EntityManager em;
     
+    @Context
+    private ServletContext context;
 
     public ReviewsFacadeREST() {
         super(Reviews.class);
     }
 
     @POST
-    @Consumes({"application/json"})
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces({"application/json"})
-    public Response create( ReviewGet review) {
+    public Response create( @FormDataParam("file") InputStream inputStream, @FormDataParam("token") String tokenString,
+                            @FormDataParam("groupId") int groupId, @FormDataParam("comment") String comment, @FormDataParam("rating") double rating,
+                            @FormDataParam("time") String time, @FormDataParam("latitude") String latitude, @FormDataParam("longitude") String longitude) {
         LoginData login = new LoginData();
-        Tokens token = login.checkToken(review.getToken());
+        Tokens token = login.checkToken(tokenString);
         if(token== null){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         Users user = token.getUser();
         Reviews entity = new Reviews();
-        entity.setName(review.getName());
-        entity.setComment(review.getComment());
-        entity.setRating(review.getRating());
-        entity.setTime(review.getTime());
-        entity.setLatitude(review.getLatitude());
-        entity.setLongitude(review.getLongitude());
-        entity.setGroupp(groupsFacade.find(review.getGroupId()));
+        entity.setName(" ");
+        entity.setComment(comment);
+        entity.setRating(rating);
+        //entity.setTime(time);
+        entity.setLatitude(latitude);
+        entity.setLongitude(longitude);
+        entity.setGroupp(groupsFacade.find(groupId));
         entity.setUser(user);
         super.create(entity);
         em.getEntityManagerFactory().getCache().evictAll();
         Reviews last = super.findAll().get(count()-1);
         IdKlasa reviewId = new IdKlasa();
         reviewId.setId(last.getId());
+        
+        savePicture(inputStream, entity);
+        
         //reviewId.setId(1);
         return Response.ok(reviewId, MediaType.APPLICATION_JSON).build();
+    }
+    
+    private void savePicture(InputStream inputStream, Reviews review) {
+        if (inputStream != null) {
+            try {
+                String fullPath = context.getRealPath("/" + Konstante.imageFolder + "/" + Konstante.reviewsFolder);
+                File yourFile = new File(fullPath + "/" + review.getId() + ".jpg");
+                if (!yourFile.exists()) {
+                    yourFile.createNewFile();
+                }
+                OutputStream outputStream = new FileOutputStream(yourFile);
+
+                int read = 0;
+                byte[] bytes = new byte[1024];
+
+                while ((read = inputStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+                
+                Files fileRecord = new Files();
+                fileRecord.setLocation(Konstante.ipAddress + "/" +  Konstante.appName + "/" + Konstante.imageFolder + "/" + Konstante.reviewsFolder + "/"+review.getId() + ".jpg");
+                fileRecord.setReview(review);
+                filesFacade.create(fileRecord);
+                System.out.println("Done!");
+            } catch (IOException ex) {
+                Logger.getLogger(ReviewsFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 //    @POST
