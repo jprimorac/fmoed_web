@@ -30,9 +30,16 @@
                     <h:form id="mainForm">
 
                         <p:dataTable style="margin-top: 20px" id="table1" var="project" value="#{projectsBean.projects}" rows="15" paginator="true" paginatorPosition="bottom">
+                            
                             <f:facet name="header">
                                 Project
                             </f:facet>
+                            <p:column width="120">
+                                <f:facet name="header">
+                                    <h:outputText value="Image" />
+                                </f:facet>
+                                <p:graphicImage url="#{project.imageLocation}" height="100" width="100" />
+                            </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Name" />
@@ -45,12 +52,7 @@
                                 </f:facet>
                                 <h:outputText value="#{project.description}" />
                             </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Image" />
-                                </f:facet>
-                                <h:outputText value="#{project.imageLocation}" />
-                            </p:column>
+                            
 
 
                         </p:dataTable>

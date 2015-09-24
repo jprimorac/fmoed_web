@@ -102,6 +102,8 @@ public class AddProjectBean {
                 while ((read = is.read(bytes)) != -1) {
                     outputStream.write(bytes, 0, read);
                 }
+                
+                project.setImageLocation("http://128.199.32.207/Reviewer/images/" + project.getName() + ".jpg");
 
                 BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
                 img.createGraphics().drawImage(ImageIO.read(new File(fullPath + "/" + project.getName() + ".jpg")).getScaledInstance(100, 100, Image.SCALE_SMOOTH), 0, 0, null);
