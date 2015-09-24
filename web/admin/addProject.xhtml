@@ -12,26 +12,28 @@
 
     </h:head>
     <h:body>
+        
+        <ui:include src="/admin/adminMenu.xhtml"/>
         <b:container style=" margin-left: auto; margin-right: auto;" >
             <b:row>
-                <b:column col-xs="10" col-sm="5" col-md="3"> 
+                <b:column col-xs="8" col-sm="4" col-md="4"> 
                     <h2>Add new project</h2>
                     <h:form id="forma" enctype="multipart/form-data">
-                        <h:panelGrid columns="2" cellpadding="5">
+                        <h:panelGrid columns="1">
                             <p:outputLabel for="name" value="Name:" />
                             <p:inputText id="name" value="#{addProjectBean.project.name}"/>
                             <p:outputLabel for="desc" value="Description:" />
                             <p:inputText id="desc" value="#{addProjectBean.project.description}"/>
                             
                             <p:outputLabel for="file" value="Picture:" />
-                            <p:fileUpload id="file" value="#{addProjectBean.picture}" mode="advanced" allowTypes="/(\.|\/)(jpg)$/" />
+                            <p:fileUpload style="overflow:hidden;" id="file" value="#{addProjectBean.picture}" mode="advanced" allowTypes="/(\.|\/)(jpg)$/" />
                             
                             <h:commandButton type="submit" class="btn btn-primary" value="Save" action="#{addProjectBean.addNewProject()}" style="width: 150px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px"/>
                         </h:panelGrid>
                     </h:form>
                 </b:column>
                 
-                <b:column col-xs="3" col-sm="3" col-md="3"> 
+                <b:column col-xs="4" col-sm="3" col-md="3"> 
                     <br/><br/><br/>
                     <h:form id="addGroupForm">
                         <p:outputLabel for="grname" value="New groups name:" />
