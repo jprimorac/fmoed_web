@@ -73,8 +73,16 @@ public class AddProjectBean {
         project.setThumbnailLocation(" ");
         project.setLatitude(" ");
         project.setLongitude(" ");
+        //kreirat grupu
         projectsFacade.create(project);
+        Groups defaultGroup = new Groups();
+        defaultGroup.setName("default");
+        defaultGroup.setProject(project);
+        groupsFacade.create(defaultGroup);
+        listGroups.add(defaultGroup);
         project.setGroupsList(listGroups);
+        defaultGroup = groupsFacade.findAll().get(groupsFacade.count()-1);
+        project.setDefaultGroup(defaultGroup.getId());
         projectsFacade.edit(project);
         savePicture();
 

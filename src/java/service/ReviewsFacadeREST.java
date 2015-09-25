@@ -56,9 +56,10 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("reviews")
 public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
     @EJB
-    private ProjectsFacade projectsFacade;
+    private GroupsFacade groupsFacade;
     @EJB
-    private FilesFacade filesFacade;
+    private ProjectsFacade projectsFacade;
+
     
     
 
@@ -99,6 +100,9 @@ public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
                 }
             }
         }
+        if(entity.getGroupp() == null){
+            entity.setGroupp(groupsFacade.find(project.getDefaultGroup()));
+        }
         
         entity.setUser(user);
         super.create(entity);
@@ -130,10 +134,8 @@ public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
                     outputStream.write(bytes, 0, read);
                 }
                 
-                Files fileRecord = new Files();
-                fileRecord.setLocation(Konstante.ipAddress + "/" +  Konstante.appName + "/" + Konstante.imageFolder + "/" + Konstante.reviewsFolder + "/"+review.getId() + ".jpg");
-                fileRecord.setReview(review);
-                filesFacade.create(fileRecord);
+                review.setImageLocation(Konstante.ipAddress + "/" +  Konstante.appName + "/" + Konstante.imageFolder + "/" + Konstante.reviewsFolder + "/"+review.getId() + ".jpg");
+                super.edit(review);
                 System.out.println("Done!");
             } catch (IOException ex) {
                 Logger.getLogger(ReviewsFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,47 +143,6 @@ public class ReviewsFacadeREST extends AbstractFacade<Reviews> {
         }
     }
 
-//    @POST
-//    @Path("image")
-//    @Consumes(MediaType.MULTIPART_FORM_DATA)
-//    public Response addImage(@FormParam("file") InputStream inputStream, @FormParam("reviewId") int reviewId)
-//    {
-//        Reviews review = super.find(reviewId);
-//        if(review!= null){
-//            savePicture(inputStream, review);
-//        }
-//
-//        return Response.ok(reviewId, MediaType.APPLICATION_JSON).build();
-//    }
-//    
-//    private void savePicture(InputStream inputStream, Reviews review) {
-//        if (inputStream != null) {
-//            try {
-//                ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-//                String fullPath = context.getRealPath("/images/reviews/");
-//                File yourFile = new File(fullPath + "/" + review.getId() + ".jpg");
-//                if (!yourFile.exists()) {
-//                    yourFile.createNewFile();
-//                }
-//                OutputStream outputStream = new FileOutputStream(yourFile);
-//
-//                int read = 0;
-//                byte[] bytes = new byte[1024];
-//
-//                while ((read = inputStream.read(bytes)) != -1) {
-//                    outputStream.write(bytes, 0, read);
-//                }
-//                
-//                Files fileRecord = new Files();
-//                fileRecord.setLocation(fullPath + "/" + review.getId() + ".jpg");
-//                fileRecord.setReview(review);
-//                filesFacade.create(fileRecord);
-//                System.out.println("Done!");
-//            } catch (IOException ex) {
-//                Logger.getLogger(ReviewsFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//    }
     
     @GET
     @Path("{id}")

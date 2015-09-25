@@ -22,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -67,6 +68,10 @@ public class Reviews implements Serializable {
     private String longitude;
     @Temporal(TemporalType.TIMESTAMP)
     private Date time;
+    @Basic(optional = false)
+    @Size(min = 1, max = 255)
+    @Column(name = "image_location", nullable = true, length = 255)
+    private String imageLocation;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "review")
     private List<Usergroupreview> usergroupreviewList;
     @JoinColumn(name = "groupp", referencedColumnName = "id", nullable = false)
@@ -172,6 +177,14 @@ public class Reviews implements Serializable {
 
     public void setUser(Users user) {
         this.user = user;
+    }
+
+    public String getImageLocation() {
+        return imageLocation;
+    }
+
+    public void setImageLocation(String imageLocation) {
+        this.imageLocation = imageLocation;
     }
 
     @XmlTransient
