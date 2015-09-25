@@ -45,42 +45,43 @@
                                         Reviews
                                     </f:facet>
                                     <p:column filterBy="#{review.groupp.project.name}"  
-                                              headerText="Project" footerText="contains"  
+                                              headerText="Project" 
                                               filterMatchMode="contains">
 
                                         <h:outputText value="#{review.groupp.project.name}" />
                                     </p:column>
                                     <p:column filterBy="#{review.groupp.name}"  
-                                              headerText="Group" footerText="contains"  
+                                              headerText="Group" 
                                               filterMatchMode="contains">
                                         <h:outputText value="#{review.groupp.name}" />
                                     </p:column>
                                     <p:column filterBy="#{review.user.username}"  
-                                              headerText="User" footerText="contains"  
+                                              headerText="User"   
                                               filterMatchMode="contains">
 
                                         <h:outputText value="#{review.user.username}" />
                                     </p:column>
                                     <p:column filterBy="#{review.user.email}"  
-                                              headerText="Email" footerText="contains"  
+                                              headerText="Email"  
                                               filterMatchMode="contains">
                                         <h:outputText value="#{review.user.email}" />
                                     </p:column>
-                                    <p:column filterBy="#{review.name}"  
-                                              headerText="Review Name" footerText="contains"  
-                                              filterMatchMode="contains">
-                                        <h:outputText value="#{review.name}" />
-                                    </p:column>
+                                    
 
                                     <p:column filterBy="#{review.comment}"  
-                                              headerText="Comment" footerText="contains"  
+                                              headerText="Comment"   
                                               filterMatchMode="contains">
                                         <h:outputText value="#{review.comment}" />
                                     </p:column>
                                     <p:column filterBy="#{review.rating}"  
-                                              headerText="Rating" footerText="contains"  
+                                              headerText="Rating"  
                                               filterMatchMode="exact">
                                         <h:outputText value="#{review.rating}" />
+                                    </p:column>
+                                    <p:column  width="90" 
+                                              headerText="Image"   
+                                              >
+                                        <h:graphicImage url="#{review.imageLocation}" height="60" width="60"  />
                                     </p:column>
 
                                 </p:dataTable>
