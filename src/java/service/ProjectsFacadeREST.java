@@ -72,6 +72,7 @@ public class ProjectsFacadeREST extends AbstractFacade<Projects> {
         proExtra.setName(project.getName());
         proExtra.setDescription(project.getDescription());
         proExtra.setImageLocation(project.getImageLocation());
+        proExtra.setThumbnailLocation(project.getThumbnailLocation());
         List<GroupExtra> groups = new ArrayList<>();
         for(Groups g : project.getGroupsList()){
             GroupExtra group = new GroupExtra();

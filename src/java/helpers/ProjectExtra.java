@@ -17,6 +17,7 @@ public class ProjectExtra {
     private String name;
     private String description;
     private String imageLocation;
+    private String thumbnailLocation;
     private List<GroupExtra> groups;
 
     public int getId() {
@@ -57,6 +58,14 @@ public class ProjectExtra {
 
     public void setGroups(List<GroupExtra> groups) {
         this.groups = groups;
+    }
+
+    public String getThumbnailLocation() {
+        return thumbnailLocation;
+    }
+
+    public void setThumbnailLocation(String thumbnailLocation) {
+        this.thumbnailLocation = thumbnailLocation;
     }
     
     

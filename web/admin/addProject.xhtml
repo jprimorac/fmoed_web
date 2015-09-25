@@ -26,7 +26,9 @@
                             <p:inputText id="desc" value="#{addProjectBean.project.description}"/>
                             
                             <p:outputLabel for="file" value="Picture:" />
-                            <p:fileUpload style="overflow:hidden;" id="file" value="#{addProjectBean.picture}" mode="advanced" allowTypes="/(\.|\/)(jpg)$/" />
+                            <p:fileUpload style="overflow:hidden;" id="file" value="#{addProjectBean.picture}" mode="simple" allowTypes="/(\.|\/)(jpg)$/" />
+                            <p:outputLabel for="thumbnail" value="Thumbnail:" />
+                            <p:fileUpload style="overflow:hidden;" id="thumbnail" value="#{addProjectBean.thumbnail}" mode="simple" allowTypes="/(\.|\/)(jpg)$/" />
                             
                             <h:commandButton type="submit" class="btn btn-primary" value="Save" action="#{addProjectBean.addNewProject()}" style="width: 150px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px"/>
                         </h:panelGrid>

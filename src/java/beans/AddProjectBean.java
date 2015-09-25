@@ -57,6 +57,7 @@ public class AddProjectBean {
     private Groups group;
     private List<Groups> listGroups;
     private UploadedFile picture;
+    private UploadedFile thumbnail;
 
     public void goToThisPage() {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
@@ -93,7 +94,7 @@ public class AddProjectBean {
                 ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
                 String fullPath = context.getRealPath("/images/");
                 InputStream is = picture.getInputstream();
-                File yourFile = new File(fullPath + "/" + project.getName() + ".jpg");
+                File yourFile = new File(fullPath + "/" + project.getId() + ".jpg");
                 if (!yourFile.exists()) {
                     yourFile.createNewFile();
                 }
@@ -106,13 +107,30 @@ public class AddProjectBean {
                     outputStream.write(bytes, 0, read);
                 }
                 
-                project.setImageLocation("http://128.199.32.207/Reviewer/images/" + project.getName() + ".jpg");
-                project.setThumbnailLocation("http://128.199.32.207/Reviewer/images/" + project.getName() + "_t.jpg");
+                project.setImageLocation("http://128.199.32.207/Reviewer/images/" + project.getId() + ".jpg");
+                
                 projectsFacade.edit(project);
 
-                BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-                img.createGraphics().drawImage(ImageIO.read(new File(fullPath + "/" + project.getName() + ".jpg")).getScaledInstance(100, 100, Image.SCALE_SMOOTH), 0, 0, null);
-                ImageIO.write(img, "jpg", new File(fullPath + "/" + project.getName() + "_t.jpg"));
+                if(thumbnail != null){
+                    
+                    is = thumbnail.getInputstream();
+                    
+                    yourFile = new File(fullPath + "/" + project.getId() + "_t.jpg");
+                if (!yourFile.exists()) {
+                    yourFile.createNewFile();
+                }
+                outputStream = new FileOutputStream(yourFile);
+
+                read = 0;
+                bytes = new byte[1024];
+
+                while ((read = is.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+                    
+                    project.setThumbnailLocation("http://128.199.32.207/Reviewer/images/" + project.getId() + "_t.jpg");
+                    projectsFacade.edit(project);
+                }
 
                 System.out.println("Done!");
             } catch (IOException ex) {
@@ -166,4 +184,13 @@ public class AddProjectBean {
         this.picture = picture;
     }
 
+    public UploadedFile getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(UploadedFile thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    
 }
