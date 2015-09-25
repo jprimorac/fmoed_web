@@ -77,10 +77,9 @@ public class LoginBean {
     public String loginUser() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if ("admin".equals(username) && "pass".equals(password)) {
-
+            facesContext.addMessage("loginForm", new FacesMessage("Username or password is incorrect"));
         } else {
             facesContext.addMessage("loginForm", new FacesMessage("Username or password is incorrect"));
-
         }
 
         if (username != null) {
@@ -93,6 +92,8 @@ public class LoginBean {
             }
         }
 
+        username = username.toLowerCase();
+        
         Admins user = adminsFacade.getUser(username);
         if (user == null) {
             usernameError = "Wrong data entered.";

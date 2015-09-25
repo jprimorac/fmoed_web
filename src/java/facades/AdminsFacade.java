@@ -38,7 +38,7 @@ public class AdminsFacade extends AbstractFacade<Admins> {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Admins> cq = cb.createQuery(Admins.class);
         Root<Admins> a = cq.from(Admins.class);
-        Predicate uvjet = cb.equal(a.get("username"), username);
+        Predicate uvjet = cb.equal(cb.lower(a.get("username")), username.toLowerCase());
         cq.where(uvjet);
         TypedQuery<Admins> q = em.createQuery(cq);
         List<Admins> users = q.getResultList();
