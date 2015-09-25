@@ -16,13 +16,23 @@
     <h:body>
         <ui:include src="/admin/adminMenu.xhtml"/>
         <b:container>
-            <h1>Welcome to the Admin panel</h1>
-            <br/>
             <div class="text-center">
-                <h2>Number of projects: #{statisticBean.numberOfProjects} </h2>
-                <h2>Number of users: #{statisticBean.numberOfUsers} </h2>
-                <h2>Number of users: #{statisticBean.numberOfReviews} </h2>
-                <h2>Average groups per project: #{statisticBean.numberOfProjects} </h2>
+                <h2 class="u">Total number of registered project is<span style="font-size: xx-large" class="text-muted">.. #{statisticBean.numberOfProjects} </span> </h2>
+                <h2 class="text-muted">with
+                    <span style="font-size: xx-large" class="text-info"><h:outputText value="#{statisticBean.averageGroupsPerProject}">
+                        <f:convertNumber type="number" minFractionDigits="1" pattern="#0.0"/>
+                    </h:outputText></span>
+                group(s) per project</h2>
+                <h1>having a <span style="font-size: larger" class="text-muted">#{statisticBean.numberOfUsers}</span>  users</h1>
+                <h2 class="text-muted">who have created total of <span style="font-size: xx-large" class="text-info"> #{statisticBean.numberOfReviews}</span> reviews </h2>
+                <br/>
+                <h1>resulting</h1>
+                <h1>
+                    <input type="hidden" class="rating" data-filled="fa fa-star fa-2x" data-empty="fa fa-star-o fa-2x" 
+                           disabled="disabled" value="#{statisticBean.averageRating}"/>
+                </h1>
+                <h1><span style="font-size: xx-large" class="text-muted"> ..</span>as average grade per project </h1>
+                <br/>
             </div>
         </b:container>
     </h:body>
