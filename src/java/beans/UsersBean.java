@@ -6,10 +6,14 @@
 package beans;
 
 import database.Admins;
+import database.Groups;
+import database.Projects;
 import database.Users;
+import database.Usersgroups;
 import facades.AdminsFacade;
 import facades.ProjectsFacade;
 import facades.UsersFacade;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -24,6 +28,8 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @RequestScoped
 public class UsersBean {
+    @EJB
+    private ProjectsFacade projectsFacade;
 
     @EJB
     private AdminsFacade adminsFacade;
@@ -53,6 +59,7 @@ public class UsersBean {
     }
 
     public void refreshList() {
+        
         this.users = usersFacade.findAll();
         this.admins = adminsFacade.findAll();
 
@@ -65,5 +72,14 @@ public class UsersBean {
     public void setAdmins(List<Admins> admins) {
         this.admins = admins;
     }
-
+    public List<Projects> getProjectsOfUser(Users user1){
+        Users user = usersFacade.find(user1.getId());
+        refreshList();
+        List<Projects> projects = new ArrayList<>();
+        for(Usersgroups usergroup:user.getUsersgroupsList()){
+            if(!projects.contains(usergroup.getGroup1().getProject()))
+                projects.add(usergroup.getGroup1().getProject());
+        }
+        return projects;
+    }
 }

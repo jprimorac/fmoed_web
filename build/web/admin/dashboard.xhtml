@@ -17,7 +17,13 @@
         <ui:include src="/admin/adminMenu.xhtml"/>
         <b:container>
             <h1>Welcome to the Admin panel</h1>
-            
+            <br/>
+            <div class="text-center">
+                <h2>Number of projects: #{statisticBean.numberOfProjects} </h2>
+                <h2>Number of users: #{statisticBean.numberOfUsers} </h2>
+                <h2>Number of users: #{statisticBean.numberOfReviews} </h2>
+                <h2>Average groups per project: #{statisticBean.numberOfProjects} </h2>
+            </div>
         </b:container>
     </h:body>
 </html>

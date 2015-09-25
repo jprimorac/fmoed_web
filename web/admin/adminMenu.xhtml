@@ -4,10 +4,13 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:b="http://bootsfaces.net/ui">
-    
+
     <h:outputStylesheet library="css" name="navbarcss.css"/>
 
-    <b:navBar brand="Reviewer" brandHref="/fmoed/faces/admin/dashboard.xhtml" class="navbar navbar-default" >
+    <b:navBar brandHref="/fmoed/faces/admin/dashboard.xhtml" class="navbar navbar-default" >
+        <div  class="pull-left col-lg-1">
+            <img style="min-width:110px;margin-left: -30px" class="img-responsive" src="/Reviewer/images/reviewer.png"  />
+        </div>
         <b:navbarLinks>
             <b:navLink value="Admin Panel" href="/faces/admin/dashboard.xhtml"></b:navLink>
             <b:navLink value="Manage Projects" href="/faces/admin/projects.xhtml"></b:navLink>
@@ -15,6 +18,7 @@
             <b:navLink value="Reviews" href="/faces/admin/reviews.xhtml"></b:navLink>
             <b:navLink value="Logout" href="/faces/logout.xhtml"></b:navLink>
         </b:navbarLinks>
+
     </b:navBar>
 
 </ui:composition>

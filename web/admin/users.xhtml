@@ -56,7 +56,9 @@
                                         <f:facet name="header">
                                             <h:outputText value="Projects Attending" />
                                         </f:facet>
-                                        <h:outputText value="not implemented" />
+                                        <ui:repeat var="project" value="#{usersBean.getProjectsOfUser(user)}">
+                                            <b:commandButton look="primary" style="margin-right:2px" value=" #{project.name} " action="#{viewProjectBean.viewProject(project)}"/>
+                                        </ui:repeat>
                                     </p:column>
 
                                 </p:dataTable>
@@ -83,12 +85,6 @@
                                             <h:outputText value="Email" />
                                         </f:facet>
                                         <h:outputText value="#{admin.email}" />
-                                    </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Projects Attending" />
-                                        </f:facet>
-                                        <h:outputText value="not implemented" />
                                     </p:column>
 
                                 </p:dataTable>

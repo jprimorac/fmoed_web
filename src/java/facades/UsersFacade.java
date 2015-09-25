@@ -29,6 +29,7 @@ public class UsersFacade extends AbstractFacade<Users> {
 
     @Override
     protected EntityManager getEntityManager() {
+        em.getEntityManagerFactory().getCache().evictAll();
         return em;
     }
 
